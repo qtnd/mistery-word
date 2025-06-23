@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mystery Word</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#ffffff"/>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f2f2f2; }
+    h1 { font-size: 2.2rem; }
+    #emoji { font-size: 4rem; margin: 1rem 0; }
+    #wordDisplay { font-size: 2rem; margin: 1rem 0; letter-spacing: 0.3em; }
+    #keyboard { display: flex; flex-wrap: wrap; justify-content: center; max-width: 600px; margin: auto; }
+    .key {
+      margin: 5px; padding: 10px 15px; font-size: 1.2rem;
+      background: #ddd; border-radius: 5px; cursor: pointer; border: none;
+    }
+    .key:disabled { background: #bbb; cursor: not-allowed; }
+    #lives, #message, #score { margin-top: 1rem; font-size: 1.2rem; }
+    #newGameBtn {
+      margin-top: 2rem; padding: 10px 20px;
+      font-size: 1rem; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔤 Mystery Word</h1>
+  <div id="emoji">🍎</div>
+  <div id="wordDisplay">_ _ _ _ _</div>
+  <div id="keyboard"></div>
+  <div id="lives">❤️❤️❤️</div>
+  <div id="score">Score: 0</div>
+  <div id="message"></div>
+  <button id="newGameBtn" onclick="startGame()">Nouvelle partie</button>
+
+  <script>
+    const baseWords = [
+      { word: "apple", emoji: "🍎" }, { word: "dog", emoji: "🐶" }, { word: "car", emoji: "🚗" },
+      { word: "book", emoji: "📖" }, { word: "cat", emoji: "🐱" }, { word: "house", emoji: "🏠" },
+      { word: "sun", emoji: "☀️" }, { word: "tree", emoji: "🌳" }, { word: "fish", emoji: "🐟" },
+      { word: "heart", emoji: "❤️" }, { word: "star", emoji: "⭐" }, { word: "ball", emoji: "⚽" },
+      { word: "train", emoji: "🚆" }, { word: "phone", emoji: "📱" }, { word: "cake", emoji: "🎂" },
+      { word: "beer", emoji: "🍺" }, { word: "grape", emoji: "🍇" }, { word: "banana", emoji: "🍌" },
+      { word: "pizza", emoji: "🍕" }, { word: "cookie", emoji: "🍪" }
+    ];
+
+    const words = [];
+    for (let i = 0; i < 200; i++) {
+      let item = baseWords[i % baseWords.length];
+      words.push({ word: item.word + (i % 5 ? "" : i), emoji: item.emoji });
+    }
+
+    let currentWord = "", guessed = [], lives = 3, score = 0;
+
+    const emojiEl = document.getElementById("emoji");
+    const wordEl = document.getElementById("wordDisplay");
+    const keyboard = document.getElementById("keyboard");
+    const livesEl = document.getElementById("lives");
+    const messageEl = document.getElementById("message");
+    const scoreEl = document.getElementById("score");
+
+    function startGame() {
+      score = 0;
+      scoreEl.textContent = "Score: 0";
+      newRound();
+    }
+
+    function newRound() {
+      const item = words[Math.floor(Math.random() * words.length)];
+      currentWord = item.word.toUpperCase();
+      emojiEl.textContent = item.emoji;
+      guessed = [];
+      lives = 3;
+      updateDisplay();
+      buildKeyboard();
+      messageEl.textContent = "";
+    }
+
+    function updateDisplay() {
+      wordEl.textContent = currentWord.split("").map(l => guessed.includes(l) ? l : "_").join(" ");
+      livesEl.textContent = "❤️".repeat(lives);
+    }
+
+    function buildKeyboard() {
+      keyboard.innerHTML = "";
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
+        const btn = document.createElement("button");
+        btn.textContent = letter;
+        btn.className = "key";
+        btn.onclick = () => handleGuess(letter, btn);
+        keyboard.appendChild(btn);
+      });
+    }
+
+    function handleGuess(letter, btn) {
+      btn.disabled = true;
+      if (currentWord.includes(letter)) {
+        guessed.push(letter);
+        updateDisplay();
+        if (currentWord.split("").every(l => guessed.includes(l))) {
+          let points = lives === 3 ? 100 : lives === 2 ? 70 : 30;
+          score += points;
+          scoreEl.textContent = `Score: ${score}`;
+          messageEl.textContent = `🎉 Bien joué ! +${points} points`;
+          setTimeout(newRound, 2000);
+        }
+      } else {
+        lives--;
+        updateDisplay();
+        if (lives === 0) {
+          messageEl.textContent = `💀 Perdu ! Le mot était "${currentWord}".`;
+          setTimeout(startGame, 3000);
+        }
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
