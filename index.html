@@ -2,127 +2,385 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mystery Word</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icons/icon-192.png">
-  <meta name="theme-color" content="#ffffff"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mystery Word - Simple Input (200 words)</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; background: #f2f2f2; }
-    h1 { font-size: 2.2rem; }
-    #emoji { font-size: 4rem; margin: 1rem 0; }
-    #wordDisplay { font-size: 2rem; margin: 1rem 0; letter-spacing: 0.3em; }
-    #keyboard { display: flex; flex-wrap: wrap; justify-content: center; max-width: 600px; margin: auto; }
-    .key {
-      margin: 5px; padding: 10px 15px; font-size: 1.2rem;
-      background: #ddd; border-radius: 5px; cursor: pointer; border: none;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+      margin: 0;
     }
-    .key:disabled { background: #bbb; cursor: not-allowed; }
-    #lives, #message, #score { margin-top: 1rem; font-size: 1.2rem; }
-    #newGameBtn {
-      margin-top: 2rem; padding: 10px 20px;
-      font-size: 1rem; background: #2196f3; color: white; border: none; border-radius: 5px; cursor: pointer;
+    h1 {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    #emoji {
+      font-size: 5rem;
+      margin: 20px 0;
+    }
+    #wordDisplay {
+      font-size: 3rem;
+      letter-spacing: 0.5rem;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    #inputLetter {
+      font-size: 2rem;
+      width: 60px;
+      text-align: center;
+      padding: 5px;
+      border: 2px solid #333;
+      border-radius: 8px;
+    }
+    #inputLetter:focus {
+      outline: none;
+      border-color: #1976d2;
+      box-shadow: 0 0 5px #1976d2;
+    }
+    #lives, #score {
+      font-size: 1.2rem;
+      margin: 5px 0;
+    }
+    #message {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      min-height: 1.5em;
+      color: #d32f2f;
+      text-align: center;
+    }
+    #btnNewGame {
+      margin-top: 25px;
+      font-size: 1.1rem;
+      padding: 10px 20px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #btnNewGame:hover {
+      background: #1565c0;
     }
   </style>
 </head>
 <body>
-  <h1>🔤 Mystery Word</h1>
-  <div id="emoji">🍎</div>
+  <h1>🎯 Mystery Word - Simple Input (200 words)</h1>
+  <div id="emoji">❓</div>
   <div id="wordDisplay">_ _ _ _ _</div>
-  <div id="keyboard"></div>
-  <div id="lives">❤️❤️❤️</div>
+  <input id="inputLetter" maxlength="1" autocomplete="off" autofocus />
+  <div id="lives">Lives: 3</div>
   <div id="score">Score: 0</div>
   <div id="message"></div>
-  <button id="newGameBtn" onclick="startGame()">Nouvelle partie</button>
+  <button id="btnNewGame" style="display:none;">Nouvelle partie</button>
 
-  <script>
-    const baseWords = [
-      { word: "apple", emoji: "🍎" }, { word: "dog", emoji: "🐶" }, { word: "car", emoji: "🚗" },
-      { word: "book", emoji: "📖" }, { word: "cat", emoji: "🐱" }, { word: "house", emoji: "🏠" },
-      { word: "sun", emoji: "☀️" }, { word: "tree", emoji: "🌳" }, { word: "fish", emoji: "🐟" },
-      { word: "heart", emoji: "❤️" }, { word: "star", emoji: "⭐" }, { word: "ball", emoji: "⚽" },
-      { word: "train", emoji: "🚆" }, { word: "phone", emoji: "📱" }, { word: "cake", emoji: "🎂" },
-      { word: "beer", emoji: "🍺" }, { word: "grape", emoji: "🍇" }, { word: "banana", emoji: "🍌" },
-      { word: "pizza", emoji: "🍕" }, { word: "cookie", emoji: "🍪" }
-    ];
+<script>
+  const words = [
+    { word: "apple", emoji: "🍎" },
+    { word: "dog", emoji: "🐶" },
+    { word: "car", emoji: "🚗" },
+    { word: "cat", emoji: "🐱" },
+    { word: "sun", emoji: "☀️" },
+    { word: "tree", emoji: "🌳" },
+    { word: "book", emoji: "📖" },
+    { word: "fish", emoji: "🐟" },
+    { word: "heart", emoji: "❤️" },
+    { word: "house", emoji: "🏠" },
+    { word: "ball", emoji: "⚽" },
+    { word: "bird", emoji: "🐦" },
+    { word: "bread", emoji: "🍞" },
+    { word: "bus", emoji: "🚌" },
+    { word: "cake", emoji: "🍰" },
+    { word: "chair", emoji: "🪑" },
+    { word: "cloud", emoji: "☁️" },
+    { word: "clock", emoji: "⏰" },
+    { word: "coffee", emoji: "☕" },
+    { word: "cow", emoji: "🐄" },
+    { word: "cup", emoji: "🥤" },
+    { word: "door", emoji: "🚪" },
+    { word: "egg", emoji: "🥚" },
+    { word: "fire", emoji: "🔥" },
+    { word: "flower", emoji: "🌸" },
+    { word: "foot", emoji: "🦶" },
+    { word: "frog", emoji: "🐸" },
+    { word: "glass", emoji: "🥛" },
+    { word: "hand", emoji: "✋" },
+    { word: "hat", emoji: "🎩" },
+    { word: "ice", emoji: "🧊" },
+    { word: "key", emoji: "🔑" },
+    { word: "lamp", emoji: "💡" },
+    { word: "leaf", emoji: "🍃" },
+    { word: "milk", emoji: "🥛" },
+    { word: "moon", emoji: "🌙" },
+    { word: "mouse", emoji: "🐭" },
+    { word: "nose", emoji: "👃" },
+    { word: "pen", emoji: "🖊️" },
+    { word: "phone", emoji: "📱" },
+    { word: "pizza", emoji: "🍕" },
+    { word: "rain", emoji: "🌧️" },
+    { word: "road", emoji: "🛣️" },
+    { word: "rock", emoji: "🪨" },
+    { word: "room", emoji: "🛏️" },
+    { word: "shoe", emoji: "👟" },
+    { word: "snow", emoji: "❄️" },
+    { word: "star", emoji: "⭐" },
+    { word: "table", emoji: "🛋️" },
+    { word: "tree", emoji: "🌲" },
+    { word: "water", emoji: "💧" },
+    { word: "window", emoji: "🪟" },
+    { word: "bird", emoji: "🐥" },
+    { word: "bus", emoji: "🚍" },
+    { word: "cake", emoji: "🎂" },
+    { word: "car", emoji: "🚙" },
+    { word: "cat", emoji: "😺" },
+    { word: "dog", emoji: "🐕" },
+    { word: "egg", emoji: "🥚" },
+    { word: "fish", emoji: "🐠" },
+    { word: "flower", emoji: "🌼" },
+    { word: "foot", emoji: "🦵" },
+    { word: "frog", emoji: "🐸" },
+    { word: "hand", emoji: "🖐️" },
+    { word: "hat", emoji: "🧢" },
+    { word: "ice", emoji: "🍧" },
+    { word: "key", emoji: "🗝️" },
+    { word: "lamp", emoji: "🛋️" },
+    { word: "leaf", emoji: "🍂" },
+    { word: "milk", emoji: "🥛" },
+    { word: "moon", emoji: "🌛" },
+    { word: "mouse", emoji: "🐁" },
+    { word: "nose", emoji: "👃🏻" },
+    { word: "pen", emoji: "🖋️" },
+    { word: "phone", emoji: "📞" },
+    { word: "pizza", emoji: "🍕" },
+    { word: "rain", emoji: "☔" },
+    { word: "road", emoji: "🛤️" },
+    { word: "rock", emoji: "🪨" },
+    { word: "room", emoji: "🛏️" },
+    { word: "shoe", emoji: "👞" },
+    { word: "snow", emoji: "☃️" },
+    { word: "star", emoji: "🌟" },
+    { word: "table", emoji: "🍽️" },
+    { word: "tree", emoji: "🌴" },
+    { word: "water", emoji: "🌊" },
+    { word: "window", emoji: "🪟" },
+    { word: "bee", emoji: "🐝" },
+    { word: "bell", emoji: "🔔" },
+    { word: "bird", emoji: "🦜" },
+    { word: "book", emoji: "📚" },
+    { word: "bread", emoji: "🥖" },
+    { word: "butter", emoji: "🧈" },
+    { word: "cake", emoji: "🧁" },
+    { word: "car", emoji: "🚕" },
+    { word: "cat", emoji: "🐈" },
+    { word: "clock", emoji: "🕰️" },
+    { word: "cloud", emoji: "🌥️" },
+    { word: "cup", emoji: "☕" },
+    { word: "door", emoji: "🚪" },
+    { word: "duck", emoji: "🦆" },
+    { word: "egg", emoji: "🥚" },
+    { word: "eye", emoji: "👁️" },
+    { word: "face", emoji: "👤" },
+    { word: "fire", emoji: "🔥" },
+    { word: "fish", emoji: "🐡" },
+    { word: "flower", emoji: "🌺" },
+    { word: "foot", emoji: "🦶" },
+    { word: "fork", emoji: "🍴" },
+    { word: "frog", emoji: "🐸" },
+    { word: "hand", emoji: "🤚" },
+    { word: "hat", emoji: "👒" },
+    { word: "heart", emoji: "💖" },
+    { word: "hill", emoji: "⛰️" },
+    { word: "horse", emoji: "🐴" },
+    { word: "house", emoji: "🏡" },
+    { word: "ice", emoji: "🧊" },
+    { word: "key", emoji: "🔐" },
+    { word: "knife", emoji: "🔪" },
+    { word: "lamp", emoji: "🔦" },
+    { word: "leaf", emoji: "🍁" },
+    { word: "leg", emoji: "🦵" },
+    { word: "lion", emoji: "🦁" },
+    { word: "milk", emoji: "🥛" },
+    { word: "moon", emoji: "🌝" },
+    { word: "mouse", emoji: "🐀" },
+    { word: "mouth", emoji: "👄" },
+    { word: "nose", emoji: "👃🏼" },
+    { word: "pen", emoji: "📝" },
+    { word: "phone", emoji: "📲" },
+    { word: "pizza", emoji: "🍕" },
+    { word: "rabbit", emoji: "🐇" },
+    { word: "rain", emoji: "🌦️" },
+    { word: "rainbow", emoji: "🌈" },
+    { word: "road", emoji: "🛣" },
+    { word: "rock", emoji: "🪨" },
+    { word: "room", emoji: "🛏" },
+    { word: "rose", emoji: "🌹" },
+    { word: "shoe", emoji: "👠" },
+    { word: "snow", emoji: "☃" },
+    { word: "star", emoji: "🌠" },
+    { word: "stone", emoji: "🪨" },
+    { word: "table", emoji: "🛋" },
+    { word: "tree", emoji: "🌴" },
+    { word: "water", emoji: "💦" },
+    { word: "window", emoji: "🪟" },
+    { word: "wolf", emoji: "🐺" },
+    { word: "zebra", emoji: "🦓" },
+    { word: "airplane", emoji: "✈️" },
+    { word: "ambulance", emoji: "🚑" },
+    { word: "bicycle", emoji: "🚲" },
+    { word: "bus", emoji: "🚌" },
+    { word: "car", emoji: "🚗" },
+    { word: "helicopter", emoji: "🚁" },
+    { word: "motorcycle", emoji: "🏍️" },
+    { word: "rocket", emoji: "🚀" },
+    { word: "ship", emoji: "🚢" },
+    { word: "submarine", emoji: "� submarine" },
+    { word: "train", emoji: "🚆" },
+    { word: "truck", emoji: "🚚" },
+    { word: "van", emoji: "🚐" },
+    { word: "watch", emoji: "⌚" },
+    { word: "computer", emoji: "💻" },
+    { word: "camera", emoji: "📷" },
+    { word: "headphones", emoji: "🎧" },
+    { word: "microphone", emoji: "🎤" },
+    { word: "printer", emoji: "🖨️" },
+    { word: "robot", emoji: "🤖" },
+    { word: "tv", emoji: "📺" },
+    { word: "umbrella", emoji: "☂️" },
+    { word: "violin", emoji: "🎻" },
+    { word: "wallet", emoji: "👛" },
+    { word: "watch", emoji: "⌚" },
+    { word: "whale", emoji: "🐋" },
+    { word: "wind", emoji: "🌬️" },
+    { word: "wizard", emoji: "🧙‍♂️" }
+  ];
 
-    const words = [];
-    for (let i = 0; i < 200; i++) {
-      let item = baseWords[i % baseWords.length];
-      words.push({ word: item.word + (i % 5 ? "" : i), emoji: item.emoji });
+  let currentWord = "";
+  let currentEmoji = "";
+  let guessedLetters = [];
+  let lives = 3;
+  let score = 0;
+  let errorsThisWord = 0;
+  let wordIndex = 0;
+  let playing = false;
+
+  const emojiEl = document.getElementById("emoji");
+  const wordDisplayEl = document.getElementById("wordDisplay");
+  const inputLetterEl = document.getElementById("inputLetter");
+  const livesEl = document.getElementById("lives");
+  const scoreEl = document.getElementById("score");
+  const messageEl = document.getElementById("message");
+  const btnNewGame = document.getElementById("btnNewGame");
+
+  function startGame() {
+    lives = 3;
+    score = 0;
+    wordIndex = 0;
+    playing = true;
+    btnNewGame.style.display = "none";
+    messageEl.textContent = "";
+    nextWord();
+    updateScoreLives();
+    inputLetterEl.disabled = false;
+    inputLetterEl.focus();
+  }
+
+  function nextWord() {
+    errorsThisWord = 0;
+    guessedLetters = [];
+    if(wordIndex >= words.length){
+      messageEl.textContent = "🎉 Félicitations, tu as terminé tous les mots !";
+      inputLetterEl.disabled = true;
+      btnNewGame.style.display = "inline-block";
+      playing = false;
+      return;
+    }
+    currentWord = words[wordIndex].word.toLowerCase();
+    currentEmoji = words[wordIndex].emoji;
+    wordIndex++;
+    emojiEl.textContent = currentEmoji;
+    updateWordDisplay();
+    messageEl.textContent = "";
+    inputLetterEl.value = "";
+    inputLetterEl.focus();
+  }
+
+  function updateWordDisplay() {
+    let display = "";
+    for(let char of currentWord) {
+      display += guessedLetters.includes(char) ? char.toUpperCase() + " " : "_ ";
+    }
+    wordDisplayEl.textContent = display.trim();
+  }
+
+  function updateScoreLives() {
+    livesEl.textContent = `Lives: ${lives}`;
+    scoreEl.textContent = `Score: ${score}`;
+  }
+
+  inputLetterEl.addEventListener("input", () => {
+    if(!playing) return;
+    let letter = inputLetterEl.value.toLowerCase();
+    if(!letter.match(/[a-z]/) || letter.length === 0) {
+      inputLetterEl.value = "";
+      return;
+    }
+    if(guessedLetters.includes(letter)) {
+      messageEl.textContent = "Lettre déjà utilisée !";
+      inputLetterEl.value = "";
+      return;
     }
 
-    let currentWord = "", guessed = [], lives = 3, score = 0;
-
-    const emojiEl = document.getElementById("emoji");
-    const wordEl = document.getElementById("wordDisplay");
-    const keyboard = document.getElementById("keyboard");
-    const livesEl = document.getElementById("lives");
-    const messageEl = document.getElementById("message");
-    const scoreEl = document.getElementById("score");
-
-    function startGame() {
-      score = 0;
-      scoreEl.textContent = "Score: 0";
-      newRound();
-    }
-
-    function newRound() {
-      const item = words[Math.floor(Math.random() * words.length)];
-      currentWord = item.word.toUpperCase();
-      emojiEl.textContent = item.emoji;
-      guessed = [];
-      lives = 3;
-      updateDisplay();
-      buildKeyboard();
-      messageEl.textContent = "";
-    }
-
-    function updateDisplay() {
-      wordEl.textContent = currentWord.split("").map(l => guessed.includes(l) ? l : "_").join(" ");
-      livesEl.textContent = "❤️".repeat(lives);
-    }
-
-    function buildKeyboard() {
-      keyboard.innerHTML = "";
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
-        const btn = document.createElement("button");
-        btn.textContent = letter;
-        btn.className = "key";
-        btn.onclick = () => handleGuess(letter, btn);
-        keyboard.appendChild(btn);
-      });
-    }
-
-    function handleGuess(letter, btn) {
-      btn.disabled = true;
-      if (currentWord.includes(letter)) {
-        guessed.push(letter);
-        updateDisplay();
-        if (currentWord.split("").every(l => guessed.includes(l))) {
-          let points = lives === 3 ? 100 : lives === 2 ? 70 : 30;
-          score += points;
-          scoreEl.textContent = `Score: ${score}`;
-          messageEl.textContent = `🎉 Bien joué ! +${points} points`;
-          setTimeout(newRound, 2000);
-        }
-      } else {
-        lives--;
-        updateDisplay();
-        if (lives === 0) {
-          messageEl.textContent = `💀 Perdu ! Le mot était "${currentWord}".`;
-          setTimeout(startGame, 3000);
-        }
+    if(currentWord.includes(letter)) {
+      guessedLetters.push(letter);
+      messageEl.textContent = "Bonne lettre !";
+    } else {
+      lives--;
+      errorsThisWord++;
+      messageEl.textContent = `Mauvaise lettre ! Vies restantes: ${lives}`;
+      if(lives <= 0){
+        messageEl.textContent = `😢 Game over ! Le mot était : ${currentWord.toUpperCase()}`;
+        inputLetterEl.disabled = true;
+        btnNewGame.style.display = "inline-block";
+        playing = false;
+        return;
       }
     }
+    updateWordDisplay();
+    updateScoreLives();
+    inputLetterEl.value = "";
 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js');
-      });
+    if(wordGuessed()){
+      updateScore();
+      messageEl.textContent = "🎉 Mot trouvé ! Mot suivant...";
+      setTimeout(nextWord, 1500);
     }
+  });
 
+  function wordGuessed(){
+    for(let char of currentWord){
+      if(!guessedLetters.includes(char)){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function updateScore(){
+    if(errorsThisWord === 0) score += 100;
+    else if(errorsThisWord === 1) score += 70;
+    else if(errorsThisWord === 2) score += 30;
+  }
+
+  btnNewGame.addEventListener("click", () => {
     startGame();
-  </script>
+  });
+
+  // Start immediately
+  startGame();
+</script>
 </body>
 </html>
