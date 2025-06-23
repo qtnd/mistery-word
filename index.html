@@ -1,81 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mystery Word - Simple Input (200 words)</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      min-height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    #emoji {
-      font-size: 5rem;
-      margin: 20px 0;
-    }
-    #wordDisplay {
-      font-size: 3rem;
-      letter-spacing: 0.5rem;
-      margin-bottom: 20px;
-      user-select: none;
-    }
-    #inputLetter {
-      font-size: 2rem;
-      width: 60px;
-      text-align: center;
-      padding: 5px;
-      border: 2px solid #333;
-      border-radius: 8px;
-    }
-    #inputLetter:focus {
-      outline: none;
-      border-color: #1976d2;
-      box-shadow: 0 0 5px #1976d2;
-    }
-    #lives, #score {
-      font-size: 1.2rem;
-      margin: 5px 0;
-    }
-    #message {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      min-height: 1.5em;
-      color: #d32f2f;
-      text-align: center;
-    }
-    #btnNewGame {
-      margin-top: 25px;
-      font-size: 1.1rem;
-      padding: 10px 20px;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    #btnNewGame:hover {
-      background: #1565c0;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mystery Word - Clavier Dynamique + 200 mots</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+  }
+  h1 {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  #emoji {
+    font-size: 5rem;
+    margin: 20px 0;
+  }
+  #wordDisplay {
+    font-size: 3rem;
+    letter-spacing: 0.5rem;
+    margin-bottom: 20px;
+    user-select: none;
+  }
+  #lives, #score {
+    font-size: 1.2rem;
+    margin: 5px 0;
+  }
+  #message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    min-height: 1.5em;
+    color: #d32f2f;
+    text-align: center;
+  }
+  #btnNewGame {
+    margin-top: 25px;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #btnNewGame:hover {
+    background: #1565c0;
+  }
+  #keyboard {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 50px);
+    gap: 10px;
+    justify-content: center;
+  }
+  .key {
+    background: #eee;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px 0;
+    text-align: center;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .key:disabled {
+    background: #a5d6a7;
+    border-color: #4caf50;
+    cursor: default;
+    color: #2e7d32;
+  }
+</style>
 </head>
 <body>
-  <h1>🎯 Mystery Word - Simple Input (200 words)</h1>
+  <h1>🎯 Mystery Word - Clavier Dynamique</h1>
   <div id="emoji">❓</div>
   <div id="wordDisplay">_ _ _ _ _</div>
-  <input id="inputLetter" maxlength="1" autocomplete="off" autofocus />
-  <div id="lives">Lives: 3</div>
+  <div id="lives">❤️❤️❤️</div>
   <div id="score">Score: 0</div>
   <div id="message"></div>
+  <div id="keyboard"></div>
   <button id="btnNewGame" style="display:none;">Nouvelle partie</button>
 
 <script>
@@ -91,171 +103,192 @@
     { word: "heart", emoji: "❤️" },
     { word: "house", emoji: "🏠" },
     { word: "ball", emoji: "⚽" },
+    { word: "phone", emoji: "📱" },
+    { word: "star", emoji: "⭐" },
     { word: "bird", emoji: "🐦" },
-    { word: "bread", emoji: "🍞" },
-    { word: "bus", emoji: "🚌" },
     { word: "cake", emoji: "🍰" },
     { word: "chair", emoji: "🪑" },
+    { word: "clock", emoji: "🕒" },
     { word: "cloud", emoji: "☁️" },
-    { word: "clock", emoji: "⏰" },
-    { word: "coffee", emoji: "☕" },
     { word: "cow", emoji: "🐄" },
-    { word: "cup", emoji: "🥤" },
     { word: "door", emoji: "🚪" },
     { word: "egg", emoji: "🥚" },
     { word: "fire", emoji: "🔥" },
     { word: "flower", emoji: "🌸" },
     { word: "foot", emoji: "🦶" },
-    { word: "frog", emoji: "🐸" },
     { word: "glass", emoji: "🥛" },
-    { word: "hand", emoji: "✋" },
     { word: "hat", emoji: "🎩" },
     { word: "ice", emoji: "🧊" },
     { word: "key", emoji: "🔑" },
-    { word: "lamp", emoji: "💡" },
     { word: "leaf", emoji: "🍃" },
     { word: "milk", emoji: "🥛" },
     { word: "moon", emoji: "🌙" },
-    { word: "mouse", emoji: "🐭" },
     { word: "nose", emoji: "👃" },
     { word: "pen", emoji: "🖊️" },
-    { word: "phone", emoji: "📱" },
-    { word: "pizza", emoji: "🍕" },
+    { word: "pig", emoji: "🐷" },
     { word: "rain", emoji: "🌧️" },
-    { word: "road", emoji: "🛣️" },
-    { word: "rock", emoji: "🪨" },
-    { word: "room", emoji: "🛏️" },
+    { word: "river", emoji: "🏞️" },
     { word: "shoe", emoji: "👟" },
     { word: "snow", emoji: "❄️" },
-    { word: "star", emoji: "⭐" },
+    { word: "sun", emoji: "☀️" },
     { word: "table", emoji: "🛋️" },
+    { word: "train", emoji: "🚆" },
     { word: "tree", emoji: "🌲" },
     { word: "water", emoji: "💧" },
     { word: "window", emoji: "🪟" },
-    { word: "bird", emoji: "🐥" },
-    { word: "bus", emoji: "🚍" },
-    { word: "cake", emoji: "🎂" },
-    { word: "car", emoji: "🚙" },
-    { word: "cat", emoji: "😺" },
-    { word: "dog", emoji: "🐕" },
-    { word: "egg", emoji: "🥚" },
-    { word: "fish", emoji: "🐠" },
-    { word: "flower", emoji: "🌼" },
-    { word: "foot", emoji: "🦵" },
-    { word: "frog", emoji: "🐸" },
-    { word: "hand", emoji: "🖐️" },
-    { word: "hat", emoji: "🧢" },
-    { word: "ice", emoji: "🍧" },
-    { word: "key", emoji: "🗝️" },
-    { word: "lamp", emoji: "🛋️" },
-    { word: "leaf", emoji: "🍂" },
-    { word: "milk", emoji: "🥛" },
-    { word: "moon", emoji: "🌛" },
-    { word: "mouse", emoji: "🐁" },
-    { word: "nose", emoji: "👃🏻" },
-    { word: "pen", emoji: "🖋️" },
-    { word: "phone", emoji: "📞" },
-    { word: "pizza", emoji: "🍕" },
-    { word: "rain", emoji: "☔" },
-    { word: "road", emoji: "🛤️" },
-    { word: "rock", emoji: "🪨" },
-    { word: "room", emoji: "🛏️" },
-    { word: "shoe", emoji: "👞" },
-    { word: "snow", emoji: "☃️" },
-    { word: "star", emoji: "🌟" },
-    { word: "table", emoji: "🍽️" },
-    { word: "tree", emoji: "🌴" },
-    { word: "water", emoji: "🌊" },
-    { word: "window", emoji: "🪟" },
+    { word: "zebra", emoji: "🦓" },
+    { word: "angel", emoji: "👼" },
+    { word: "baby", emoji: "👶" },
+    { word: "bag", emoji: "👜" },
+    { word: "balloon", emoji: "🎈" },
+    { word: "banana", emoji: "🍌" },
+    { word: "beach", emoji: "🏖️" },
     { word: "bee", emoji: "🐝" },
     { word: "bell", emoji: "🔔" },
-    { word: "bird", emoji: "🦜" },
+    { word: "bench", emoji: "🪑" },
+    { word: "bicycle", emoji: "🚲" },
+    { word: "bird", emoji: "🐥" },
+    { word: "birthday", emoji: "🎂" },
+    { word: "boat", emoji: "⛵" },
     { word: "book", emoji: "📚" },
-    { word: "bread", emoji: "🥖" },
-    { word: "butter", emoji: "🧈" },
-    { word: "cake", emoji: "🧁" },
-    { word: "car", emoji: "🚕" },
+    { word: "bottle", emoji: "🍾" },
+    { word: "bread", emoji: "🍞" },
+    { word: "bridge", emoji: "🌉" },
+    { word: "bus", emoji: "🚌" },
+    { word: "butterfly", emoji: "🦋" },
+    { word: "cake", emoji: "🎂" },
+    { word: "camera", emoji: "📷" },
+    { word: "camp", emoji: "🏕️" },
+    { word: "candle", emoji: "🕯️" },
+    { word: "candy", emoji: "🍬" },
+    { word: "carrot", emoji: "🥕" },
+    { word: "castle", emoji: "🏰" },
     { word: "cat", emoji: "🐈" },
+    { word: "chair", emoji: "🪑" },
+    { word: "cheese", emoji: "🧀" },
+    { word: "chicken", emoji: "🐔" },
+    { word: "child", emoji: "🧒" },
     { word: "clock", emoji: "🕰️" },
-    { word: "cloud", emoji: "🌥️" },
+    { word: "cloud", emoji: "☁️" },
+    { word: "coffee", emoji: "☕" },
+    { word: "computer", emoji: "💻" },
+    { word: "cookie", emoji: "🍪" },
+    { word: "cow", emoji: "🐄" },
     { word: "cup", emoji: "☕" },
+    { word: "desk", emoji: "🛋️" },
+    { word: "dog", emoji: "🐕" },
+    { word: "dolphin", emoji: "🐬" },
     { word: "door", emoji: "🚪" },
-    { word: "duck", emoji: "🦆" },
+    { word: "dragon", emoji: "🐉" },
+    { word: "dress", emoji: "👗" },
     { word: "egg", emoji: "🥚" },
+    { word: "elephant", emoji: "🐘" },
     { word: "eye", emoji: "👁️" },
-    { word: "face", emoji: "👤" },
-    { word: "fire", emoji: "🔥" },
-    { word: "fish", emoji: "🐡" },
-    { word: "flower", emoji: "🌺" },
-    { word: "foot", emoji: "🦶" },
+    { word: "face", emoji: "😊" },
+    { word: "family", emoji: "👨‍👩‍👧‍👦" },
+    { word: "farm", emoji: "🚜" },
+    { word: "finger", emoji: "☝️" },
+    { word: "fish", emoji: "🐠" },
+    { word: "flower", emoji: "🌼" },
+    { word: "football", emoji: "🏈" },
     { word: "fork", emoji: "🍴" },
     { word: "frog", emoji: "🐸" },
+    { word: "garden", emoji: "🏡" },
+    { word: "gift", emoji: "🎁" },
+    { word: "girl", emoji: "👧" },
+    { word: "glasses", emoji: "👓" },
+    { word: "goat", emoji: "🐐" },
+    { word: "grape", emoji: "🍇" },
+    { word: "grass", emoji: "🌾" },
+    { word: "guitar", emoji: "🎸" },
+    { word: "hair", emoji: "💇‍♂️" },
     { word: "hand", emoji: "🤚" },
-    { word: "hat", emoji: "👒" },
-    { word: "heart", emoji: "💖" },
+    { word: "hat", emoji: "🎩" },
+    { word: "head", emoji: "🧑‍🦲" },
+    { word: "heart", emoji: "❤️" },
     { word: "hill", emoji: "⛰️" },
     { word: "horse", emoji: "🐴" },
     { word: "house", emoji: "🏡" },
-    { word: "ice", emoji: "🧊" },
-    { word: "key", emoji: "🔐" },
+    { word: "island", emoji: "🏝️" },
+    { word: "juice", emoji: "🧃" },
+    { word: "key", emoji: "🗝️" },
+    { word: "king", emoji: "🤴" },
+    { word: "kite", emoji: "🪁" },
     { word: "knife", emoji: "🔪" },
-    { word: "lamp", emoji: "🔦" },
-    { word: "leaf", emoji: "🍁" },
+    { word: "ladybug", emoji: "🐞" },
+    { word: "lamp", emoji: "💡" },
+    { word: "leaf", emoji: "🍃" },
     { word: "leg", emoji: "🦵" },
     { word: "lion", emoji: "🦁" },
+    { word: "lizard", emoji: "🦎" },
+    { word: "lock", emoji: "🔒" },
+    { word: "man", emoji: "👨" },
+    { word: "map", emoji: "🗺️" },
     { word: "milk", emoji: "🥛" },
-    { word: "moon", emoji: "🌝" },
-    { word: "mouse", emoji: "🐀" },
+    { word: "monkey", emoji: "🐒" },
+    { word: "moon", emoji: "🌛" },
+    { word: "mouse", emoji: "🐭" },
     { word: "mouth", emoji: "👄" },
-    { word: "nose", emoji: "👃🏼" },
-    { word: "pen", emoji: "📝" },
-    { word: "phone", emoji: "📲" },
+    { word: "nail", emoji: "💅" },
+    { word: "nest", emoji: "🪹" },
+    { word: "nose", emoji: "👃" },
+    { word: "orange", emoji: "🍊" },
+    { word: "owl", emoji: "🦉" },
+    { word: "page", emoji: "📄" },
+    { word: "pants", emoji: "👖" },
+    { word: "paper", emoji: "📄" },
+    { word: "pen", emoji: "🖊️" },
+    { word: "pencil", emoji: "✏️" },
+    { word: "phone", emoji: "📞" },
+    { word: "pig", emoji: "🐷" },
     { word: "pizza", emoji: "🍕" },
+    { word: "plant", emoji: "🪴" },
+    { word: "plate", emoji: "🍽️" },
     { word: "rabbit", emoji: "🐇" },
-    { word: "rain", emoji: "🌦️" },
-    { word: "rainbow", emoji: "🌈" },
-    { word: "road", emoji: "🛣" },
+    { word: "rain", emoji: "🌧️" },
+    { word: "ring", emoji: "💍" },
+    { word: "river", emoji: "🏞️" },
+    { word: "road", emoji: "🛣️" },
     { word: "rock", emoji: "🪨" },
-    { word: "room", emoji: "🛏" },
+    { word: "roof", emoji: "🏠" },
     { word: "rose", emoji: "🌹" },
+    { word: "salt", emoji: "🧂" },
+    { word: "sand", emoji: "🏖️" },
+    { word: "school", emoji: "🏫" },
+    { word: "scissors", emoji: "✂️" },
+    { word: "sea", emoji: "🌊" },
+    { word: "sheep", emoji: "🐑" },
+    { word: "shoe", emoji: "👞" },
+    { word: "ship", emoji: "🚢" },
+    { word: "shirt", emoji: "👕" },
     { word: "shoe", emoji: "👠" },
-    { word: "snow", emoji: "☃" },
-    { word: "star", emoji: "🌠" },
+    { word: "shop", emoji: "🏬" },
+    { word: "sink", emoji: "🚰" },
+    { word: "sky", emoji: "🌌" },
+    { word: "snake", emoji: "🐍" },
+    { word: "snow", emoji: "❄️" },
+    { word: "sock", emoji: "🧦" },
+    { word: "star", emoji: "⭐" },
     { word: "stone", emoji: "🪨" },
-    { word: "table", emoji: "🛋" },
-    { word: "tree", emoji: "🌴" },
-    { word: "water", emoji: "💦" },
+    { word: "stove", emoji: "🔥" },
+    { word: "street", emoji: "🛣️" },
+    { word: "sun", emoji: "☀️" },
+    { word: "table", emoji: "🛋️" },
+    { word: "tiger", emoji: "🐅" },
+    { word: "tooth", emoji: "🦷" },
+    { word: "tree", emoji: "🌲" },
+    { word: "truck", emoji: "🚚" },
+    { word: "umbrella", emoji: "☂️" },
+    { word: "vase", emoji: "🏺" },
+    { word: "wall", emoji: "🧱" },
+    { word: "watch", emoji: "⌚" },
+    { word: "water", emoji: "💧" },
+    { word: "wheel", emoji: "🛞" },
     { word: "window", emoji: "🪟" },
     { word: "wolf", emoji: "🐺" },
-    { word: "zebra", emoji: "🦓" },
-    { word: "airplane", emoji: "✈️" },
-    { word: "ambulance", emoji: "🚑" },
-    { word: "bicycle", emoji: "🚲" },
-    { word: "bus", emoji: "🚌" },
-    { word: "car", emoji: "🚗" },
-    { word: "helicopter", emoji: "🚁" },
-    { word: "motorcycle", emoji: "🏍️" },
-    { word: "rocket", emoji: "🚀" },
-    { word: "ship", emoji: "🚢" },
-    { word: "submarine", emoji: "� submarine" },
-    { word: "train", emoji: "🚆" },
-    { word: "truck", emoji: "🚚" },
-    { word: "van", emoji: "🚐" },
-    { word: "watch", emoji: "⌚" },
-    { word: "computer", emoji: "💻" },
-    { word: "camera", emoji: "📷" },
-    { word: "headphones", emoji: "🎧" },
-    { word: "microphone", emoji: "🎤" },
-    { word: "printer", emoji: "🖨️" },
-    { word: "robot", emoji: "🤖" },
-    { word: "tv", emoji: "📺" },
-    { word: "umbrella", emoji: "☂️" },
-    { word: "violin", emoji: "🎻" },
-    { word: "wallet", emoji: "👛" },
-    { word: "watch", emoji: "⌚" },
-    { word: "whale", emoji: "🐋" },
-    { word: "wind", emoji: "🌬️" },
-    { word: "wizard", emoji: "🧙‍♂️" }
+    { word: "woman", emoji: "👩" },
+    { word: "worm", emoji: "🪱" },
+    { word: "zebra", emoji: "🦓" }
   ];
 
   let currentWord = "";
@@ -264,48 +297,40 @@
   let lives = 3;
   let score = 0;
   let errorsThisWord = 0;
-  let wordIndex = 0;
   let playing = false;
 
   const emojiEl = document.getElementById("emoji");
   const wordDisplayEl = document.getElementById("wordDisplay");
-  const inputLetterEl = document.getElementById("inputLetter");
   const livesEl = document.getElementById("lives");
   const scoreEl = document.getElementById("score");
   const messageEl = document.getElementById("message");
+  const keyboardEl = document.getElementById("keyboard");
   const btnNewGame = document.getElementById("btnNewGame");
 
   function startGame() {
     lives = 3;
     score = 0;
-    wordIndex = 0;
     playing = true;
     btnNewGame.style.display = "none";
     messageEl.textContent = "";
     nextWord();
     updateScoreLives();
-    inputLetterEl.disabled = false;
-    inputLetterEl.focus();
   }
 
   function nextWord() {
     errorsThisWord = 0;
     guessedLetters = [];
-    if(wordIndex >= words.length){
-      messageEl.textContent = "🎉 Félicitations, tu as terminé tous les mots !";
-      inputLetterEl.disabled = true;
-      btnNewGame.style.display = "inline-block";
-      playing = false;
+    if(words.length === 0){
+      messageEl.textContent = "Aucun mot dans la liste.";
       return;
     }
-    currentWord = words[wordIndex].word.toLowerCase();
-    currentEmoji = words[wordIndex].emoji;
-    wordIndex++;
+    const randomIndex = Math.floor(Math.random() * words.length);
+    currentWord = words[randomIndex].word.toLowerCase();
+    currentEmoji = words[randomIndex].emoji;
     emojiEl.textContent = currentEmoji;
     updateWordDisplay();
     messageEl.textContent = "";
-    inputLetterEl.value = "";
-    inputLetterEl.focus();
+    createKeyboard();
   }
 
   function updateWordDisplay() {
@@ -317,48 +342,71 @@
   }
 
   function updateScoreLives() {
-    livesEl.textContent = `Lives: ${lives}`;
+    livesEl.textContent = "Vies : " + "❤️".repeat(lives) + "🤍".repeat(3 - lives);
     scoreEl.textContent = `Score: ${score}`;
   }
 
-  inputLetterEl.addEventListener("input", () => {
-    if(!playing) return;
-    let letter = inputLetterEl.value.toLowerCase();
-    if(!letter.match(/[a-z]/) || letter.length === 0) {
-      inputLetterEl.value = "";
-      return;
+  function createKeyboard() {
+    keyboardEl.innerHTML = "";
+    // Lettres du mot sans doublons
+    let letters = [...new Set(currentWord.split(""))];
+    // Compléter avec des lettres aléatoires jusqu'à 12 touches max (modifiable)
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    while(letters.length < 12){
+      const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+      if(!letters.includes(randomLetter)) letters.push(randomLetter);
     }
+    // Mélanger les lettres (shuffle)
+    for(let i = letters.length -1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [letters[i], letters[j]] = [letters[j], letters[i]];
+    }
+
+    letters.forEach(letter => {
+      const btn = document.createElement("button");
+      btn.textContent = letter.toUpperCase();
+      btn.classList.add("key");
+      btn.addEventListener("click", () => handleLetterClick(letter, btn));
+      keyboardEl.appendChild(btn);
+    });
+  }
+
+  function handleLetterClick(letter, btn) {
+    if(!playing) return;
     if(guessedLetters.includes(letter)) {
       messageEl.textContent = "Lettre déjà utilisée !";
-      inputLetterEl.value = "";
       return;
     }
 
     if(currentWord.includes(letter)) {
       guessedLetters.push(letter);
       messageEl.textContent = "Bonne lettre !";
+      btn.disabled = true;
     } else {
       lives--;
       errorsThisWord++;
       messageEl.textContent = `Mauvaise lettre ! Vies restantes: ${lives}`;
+      btn.disabled = true;
       if(lives <= 0){
         messageEl.textContent = `😢 Game over ! Le mot était : ${currentWord.toUpperCase()}`;
-        inputLetterEl.disabled = true;
-        btnNewGame.style.display = "inline-block";
         playing = false;
+        btnNewGame.style.display = "inline-block";
+        disableKeyboard();
         return;
       }
     }
     updateWordDisplay();
     updateScoreLives();
-    inputLetterEl.value = "";
 
     if(wordGuessed()){
       updateScore();
       messageEl.textContent = "🎉 Mot trouvé ! Mot suivant...";
-      setTimeout(nextWord, 1500);
+      disableKeyboard();
+      setTimeout(() => {
+        nextWord();
+      }, 1500);
     }
-  });
+  }
 
   function wordGuessed(){
     for(let char of currentWord){
@@ -371,16 +419,24 @@
 
   function updateScore(){
     if(errorsThisWord === 0) score += 100;
-    else if(errorsThisWord === 1) score += 70;
-    else if(errorsThisWord === 2) score += 30;
+    else if(errorsThisWord === 1) score += 75;
+    else if(errorsThisWord === 2) score += 50;
+    else score += 25;
+    updateScoreLives();
+  }
+
+  function disableKeyboard(){
+    const keys = keyboardEl.querySelectorAll("button");
+    keys.forEach(k => k.disabled = true);
   }
 
   btnNewGame.addEventListener("click", () => {
     startGame();
   });
 
-  // Start immediately
+  // Démarrer la partie automatiquement au chargement
   startGame();
 </script>
 </body>
 </html>
+
